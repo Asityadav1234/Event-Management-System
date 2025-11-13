@@ -1,103 +1,127 @@
 # Event Management System — Software Engineering Principles
 
-## Project Summary
+A documentation for the Event Management System built using standard Software Engineering (SE) principles.
 
-A web-based application to create, manage, and monitor events, participants, and registrations with role-based access control (Admin / Organizer / User). Built with a modular architecture and following SE best practices for maintainability, scalability, and testability.
+---
 
-##  Table of Contents
+## Overview
+
+A web-based system to create and manage events, registrations, and user roles (Admin / Organizer / User). The project demonstrates clear SE practices including modular design, requirement analysis, layered architecture, and testing methodology.
+
+---
+
+## Table of Contents
 
 * [Features](#features)
 * [SE Principles Applied](#se-principles-applied)
-* [Architecture](#architecture)
+* [System Architecture](#system-architecture)
 * [Tech Stack](#tech-stack)
-* [Database Schema (high level)](#database-schema-high-level)
+* [Database Schema](#database-schema)
 * [Getting Started](#getting-started)
 * [Project Structure](#project-structure)
-* [API Endpoints (example)](#api-endpoints-example)
+* [API Endpoints](#api-endpoints)
 * [Testing Strategy](#testing-strategy)
 * [Future Enhancements](#future-enhancements)
 * [Contributors](#contributors)
 
 ---
 
-## ✨ Features
+## Features
 
-* User registration & authentication (JWT)
+* User authentication (JWT)
 * Role-based access: Admin / Organizer / User
-* Create, update, delete, and list events
-* Participant registration for events
-* Admin dashboard for event management
-* Input validation & error handling
-* Secure password hashing
+* Create, update, delete, and view events
+* Register users for events
+* Admin panel for managing events and registrations
+* Input validation and secure password handling
 
 ---
 
-##  SE Principles Applied
+## SE Principles Applied
 
-* **Requirement Analysis:** Functional and non-functional requirements documented (use-cases, success criteria).
-* **Design Principles:** SRP, DRY, modular services, layered architecture (controller → service → repository).
-* **Database Normalization:** 3NF applied to reduce redundancy.
-* **Version Control & CI:** Git flow + GitHub Actions (suggested) for automated tests and linting.
-* **Testing:** Unit tests for services, integration tests for APIs.
+### Requirement Analysis
+
+* Functional and non-functional requirements documented
+* Use cases and workflow diagrams
+
+### Design Principles
+
+* Single Responsibility Principle (SRP)
+* DRY (reuse of services and helpers)
+* Layered architecture: Controller → Service → Database
+* Database normalization up to 3NF
+
+### Process Model
+
+* Iterative model with regular testing and refinement
 
 ---
 
-##  Architecture
+## System Architecture
 
 ```
-Client (React / Vue / HTML)  <--->  REST API (Express / Django / Spring)  <--->  Database (Postgres / MySQL)
+Frontend (React / HTML-CSS-JS)
+        ↓
+Backend (Node.js / Express)
+        ↓
+Database (PostgreSQL / MySQL)
 ```
 
-* Presentation Layer (frontend)
-* Application Layer (controllers, authentication)
-* Service Layer (business logic)
-* Data Access Layer (ORM / queries)
+* Presentation Layer
+* Application Layer
+* Database Layer
 
 ---
 
-##  Tech Stack (suggested)
+## Tech Stack
 
-* Frontend: React (create-react-app) or plain HTML/CSS/JS
-* Backend: Node.js + Express (or Django/Flask, Spring Boot)
-* Database: PostgreSQL (recommended) or MySQL
-* Auth: JWT
-* Testing: Jest / Mocha (Node), pytest (Python)
-* Dev Tools: Docker (optional), Postman
+**Frontend:** React / HTML / CSS / JavaScript
+**Backend:** Node.js + Express
+**Database:** PostgreSQL or MySQL
+**Tools:** GitHub, VS Code, Postman
 
 ---
 
-##  Database Schema (high level)
+## Database Schema
 
-**Users**: `id, name, email, password_hash, role, created_at`
+### Users
 
-**Events**: `id, title, description, start_time, end_time, location, capacity, organizer_id, created_at`
+* id, name, email, password_hash, role, created_at
 
-**Registrations**: `id, user_id, event_id, status, registered_at`
+### Events
 
-Relationships:
+* id, title, description, start_time, end_time, location, organizer_id
 
-* Users (1) --- (N) Events (organizer)
-* Users (N) --- (N) Events (through Registrations)
+### Registrations
+
+* id, user_id, event_id, status, registered_at
+
+**Relations:**
+
+* Users (1→N) Events
+* Users (N→N) Events via Registrations
 
 ---
 
-##  Getting Started (Node.js + Postgres example)
+## Getting Started
 
-1. Clone repo:
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/<your-username>/<repo>.git
-cd <repo>
+git clone https://github.com/<your-username>/<repo-name>
+cd repo-name
 ```
 
-2. Install backend dependencies:
+### 2. Install Backend Dependencies
 
 ```bash
 cd backend
 npm install
 ```
 
-3. Create `.env` file (example):
+### 3. Configure Environment Variables
+
+Create a `.env` file:
 
 ```
 PORT=5000
@@ -105,17 +129,16 @@ DB_HOST=localhost
 DB_USER=youruser
 DB_PASS=yourpass
 DB_NAME=eventdb
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=your_secret
 ```
 
-4. Run database migrations / create tables (use your ORM or SQL scripts).
-5. Start server:
+### 4. Start Server
 
 ```bash
 npm start
 ```
 
-6. (Optional) Start frontend:
+### 5. (Optional) Start Frontend
 
 ```bash
 cd ../frontend
@@ -125,74 +148,67 @@ npm start
 
 ---
 
-##  Project Structure (recommended)
+## Project Structure
 
 ```
 /backend
   /controllers
   /services
-  /models
   /routes
   /middleware
+  /models
   app.js
 /frontend
   /src
     /components
     /pages
-    App.js
 README.md
 ```
 
 ---
 
-##  Example API Endpoints
+## API Endpoints
 
-> Replace `/api` prefix depending on your routing.
+### Authentication
 
-**Auth**
+* POST /auth/signup — Register a new user
+* POST /auth/login — Login and receive JWT
 
-* `POST /api/auth/signup` — Register (body: name, email, password)
-* `POST /api/auth/login` — Login (body: email, password) → returns JWT
+### Events
 
-**Events**
+* GET /events — List all events
+* POST /events — Create event
+* PUT /events/:id — Update event
+* DELETE /events/:id — Delete event
 
-* `GET /api/events` — List all events
-* `GET /api/events/:id` — Get event by id
-* `POST /api/events` — Create event (Admin/Organizer)
-* `PUT /api/events/:id` — Update event (Admin/Organizer)
-* `DELETE /api/events/:id` — Delete event (Admin/Organizer)
+### Registrations
 
-**Registrations**
-
-* `POST /api/registrations` — Register for event (body: event_id)
-* `GET /api/users/:id/registrations` — Get user registrations
+* POST /registrations — Register for an event
+* GET /users/:id/registrations — View user registrations
 
 ---
 
-##  Testing Strategy
+## Testing Strategy
 
-* **Unit tests**: service functions and utilities (fast, isolated)
-* **Integration tests**: API endpoints with an in-memory or test DB
-* **E2E (optional)**: Cypress or Selenium for full workflow
-* **Continuous Integration**: run tests on pull requests using GitHub Actions
-
----
-
-##  Future Enhancements
-
-* Payment gateway integration
-* Email / SMS notifications
-* Event analytics and reporting
-* QR code / barcode check-in system
-* Mobile app support
+* Unit tests for services and utility functions
+* Integration tests for API routes
+* Manual UI testing using Postman or browser
 
 ---
 
+## Future Enhancements
 
-* Provide a ready-to-use `README.md` file with badges and contributor table.
-* Generate sample SQL migration scripts or Sequelize/TypeORM models.
-* Create `docker-compose.yml` to run the stack locally.
+* Payment integration
+* QR-based event check-in
+* Email/SMS notifications
+* Analytics dashboard for admins
+* Mobile app version
 
 ---
 
-*Copy-paste this entire file into your GitHub `README.md`.*
+## Contributors
+
+**Asit Yadav (2023UCP1588)**  
+**Jatin Bhatia (2023UCP1963)**  
+**Prahlad Kumar Prajapat (2023UCP1580)**
+---
