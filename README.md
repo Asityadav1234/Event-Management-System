@@ -1,10 +1,10 @@
 # Event Management System — Software Engineering Principles
 
-## 🚀 Project Summary
+## Project Summary
 
 A web-based application to create, manage, and monitor events, participants, and registrations with role-based access control (Admin / Organizer / User). Built with a modular architecture and following SE best practices for maintainability, scalability, and testability.
 
-## 📌 Table of Contents
+##  Table of Contents
 
 * [Features](#features)
 * [SE Principles Applied](#se-principles-applied)
@@ -32,7 +32,7 @@ A web-based application to create, manage, and monitor events, participants, and
 
 ---
 
-## 🧩 SE Principles Applied
+##  SE Principles Applied
 
 * **Requirement Analysis:** Functional and non-functional requirements documented (use-cases, success criteria).
 * **Design Principles:** SRP, DRY, modular services, layered architecture (controller → service → repository).
@@ -42,7 +42,7 @@ A web-based application to create, manage, and monitor events, participants, and
 
 ---
 
-## 🏗 Architecture
+##  Architecture
 
 ```
 Client (React / Vue / HTML)  <--->  REST API (Express / Django / Spring)  <--->  Database (Postgres / MySQL)
@@ -55,7 +55,7 @@ Client (React / Vue / HTML)  <--->  REST API (Express / Django / Spring)  <---> 
 
 ---
 
-## 🛠 Tech Stack (suggested)
+##  Tech Stack (suggested)
 
 * Frontend: React (create-react-app) or plain HTML/CSS/JS
 * Backend: Node.js + Express (or Django/Flask, Spring Boot)
@@ -66,7 +66,7 @@ Client (React / Vue / HTML)  <--->  REST API (Express / Django / Spring)  <---> 
 
 ---
 
-## 🗄 Database Schema (high level)
+##  Database Schema (high level)
 
 **Users**: `id, name, email, password_hash, role, created_at`
 
@@ -81,7 +81,7 @@ Relationships:
 
 ---
 
-## ⚡ Getting Started (Node.js + Postgres example)
+##  Getting Started (Node.js + Postgres example)
 
 1. Clone repo:
 
@@ -125,7 +125,7 @@ npm start
 
 ---
 
-## 📁 Project Structure (recommended)
+##  Project Structure (recommended)
 
 ```
 /backend
@@ -145,7 +145,7 @@ README.md
 
 ---
 
-## 🔌 Example API Endpoints
+##  Example API Endpoints
 
 > Replace `/api` prefix depending on your routing.
 
@@ -169,7 +169,7 @@ README.md
 
 ---
 
-## ✅ Testing Strategy
+##  Testing Strategy
 
 * **Unit tests**: service functions and utilities (fast, isolated)
 * **Integration tests**: API endpoints with an in-memory or test DB
@@ -178,7 +178,7 @@ README.md
 
 ---
 
-## 🔭 Future Enhancements
+##  Future Enhancements
 
 * Payment gateway integration
 * Email / SMS notifications
