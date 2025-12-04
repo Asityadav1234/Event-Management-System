@@ -2,6 +2,7 @@ import Dashboard_Filter from "@/components/Dashboard_Filter";
 import Popup_Filter from "@/components/Popup_Filter";
 import UserNavBar from "@/components/UserNavBar";
 import { getUserToken } from "@/utils/getUserToken";
+import { normalizeImagePath } from "@/utils/normalizeImagePath";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -109,7 +110,7 @@ function UserDashboard() {
                                                         <Image
                                                             fill
                                                             className="object-cover h-full w-full rounded-md"
-                                                            src={event.profile}
+                                                            src={normalizeImagePath(event.profile)}
                                                             alt=""
                                                             sizes="(min-width: 640px) 100vw, 50vw"
                                                             priority

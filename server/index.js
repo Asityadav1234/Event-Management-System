@@ -16,17 +16,25 @@ const eventRouter = require("./routes/eventRoutes");
 // const checkInRouter = require("./routes/checkInRoutes")
 
 dotenv.config();
-console.log("Connecting to MongoDB with URI:", process.env.MONGO_URI);
 
 // database url
+const mongoUri = process.env.MONGO_URI || process.env.MONGO_ATLAS_URI;
+if (!mongoUri) {
+    console.error("❌ ERROR: MONGO_URI or MONGO_ATLAS_URI not found in environment variables!");
+    process.exit(1);
+}
+
 mongoose
-    .connect(process.env.MONGO_URI, {
+    .connect(mongoUri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-    .then(() => {})
+    .then(() => {
+        console.log("✅ MongoDB connected successfully!");
+    })
     .catch((err) => {
-        console.log(err);
+        console.error("❌ MongoDB connection error:", err.message);
+        process.exit(1);
     });
 
 require("./models/otpAuth");

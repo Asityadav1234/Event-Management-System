@@ -2,6 +2,7 @@ import AdminNavBar from "@/components/AdminNavBar";
 import Dashboard_Filter from "@/components/Dashboard_Filter";
 import Popup_Filter from "@/components/Popup_Filter";
 import { getAdminToken } from "@/utils/getAdminToken";
+import { normalizeImagePath } from "@/utils/normalizeImagePath";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -160,7 +161,7 @@ function UserDashboard() {
                                                         <Image
                                                             fill
                                                             className="object-cover h-full w-full rounded-md"
-                                                            src={event.profile}
+                                                            src={normalizeImagePath(event.profile)}
                                                             alt=""
                                                             sizes="(min-width: 640px) 100vw, 50vw"
                                                             priority
@@ -170,13 +171,10 @@ function UserDashboard() {
                                                 <div className="flex flex-row justify-between items-start mt-4">
                                                     <div className="px-2">
                                                         <p className="text-sm text-gray-800 font-bold">
-                                                            {event.name.length >
-                                                            30
-                                                                ? event.name.slice(
-                                                                      0,
-                                                                      30
-                                                                  ) + "..."
-                                                                : event.name}
+                                                            {event.name &&
+                                                            event.name.length > 30
+                                                                ? event.name.slice(0, 30) + "..."
+                                                                : event.name || "Untitled event"}
                                                         </p>
                                                         <p className="text-sm text-gray-800">
                                                             {event.venue}

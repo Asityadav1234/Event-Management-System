@@ -1,5 +1,6 @@
 import UserNavBar from "@/components/UserNavBar";
 import { getUserToken } from "@/utils/getUserToken";
+import { normalizeImagePath } from "@/utils/normalizeImagePath";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -77,18 +78,17 @@ function EventPage() {
                     <div className="relative h-40 sm:h-[25rem] overflow-hidden container shadow-lg">
                         {/* blurred image background */}
                         <Image
-                            src={eventData.cover}
+                            src={normalizeImagePath(eventData.cover)}
                             alt={eventData.name}
                             fill
                             placeholder="blur"
-                            blurDataURL={eventData.cover}
+                            blurDataURL={normalizeImagePath(eventData.cover)}
                             className="h-[25rem] container filter blur hidden lg:block object-cover"
                         />
 
                         <div className="absolute inset-0 w-full h-40 sm:h-[25rem] container">
                             <Image
-                                // src="https://assets-in.bmscdn.com/nmcms/events/banner/desktop/media-desktop-jo-bolta-hai-wohi-hota-hai-ft-harsh-gujral-0-2023-2-3-t-9-23-51.jpg"
-                                src={eventData.cover}
+                                src={normalizeImagePath(eventData.cover)}
                                 alt="Event image"
                                 fill
                                 className="absolute object-contain object-center"
@@ -100,7 +100,7 @@ function EventPage() {
                     <div className="container bg-white py-4 mt-4 rounded-lg shadow-md">
                         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex flex-col lg:flex-row lg:items-center justify-between">
-                                <div className="flex flex-col">
+                                <div className="flex flex-col pt-4 md:pt-6">
                                     <h1 className="text-4xl font-bold text-gray-900 mb-2">
                                         {eventData.name}
                                     </h1>
@@ -181,16 +181,9 @@ function EventPage() {
                                     <h3 className="text-xl font-semibold text-gray-900 mb-2">
                                         About the Event
                                     </h3>
-                                    {Array(3)
-                                        .fill()
-                                        .map((_, index) => (
-                                            <p
-                                                key={index}
-                                                className="text-gray-600 text-md"
-                                            >
-                                                {eventData.description}
-                                            </p>
-                                        ))}
+                                    <p className="text-gray-600 text-md">
+                                        {eventData.description}
+                                    </p>
                                 </div>
                                 <div className="mb-4 bg-white px-6 py-4 rounded-lg shadow-md">
                                     <h3 className="text-xl font-semibold text-gray-900 mb-2">

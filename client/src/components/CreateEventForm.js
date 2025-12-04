@@ -1,4 +1,5 @@
 import { getAdminToken } from "@/utils/getAdminToken";
+import { normalizeImagePath } from "@/utils/normalizeImagePath";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -45,8 +46,8 @@ const CreateEvent = () => {
             time: time,
             description: formData.description,
             price: formData.price,
-            profile: formData.profile != "" ? formData.profile : undefined,
-            cover: formData.cover != "" ? formData.cover : undefined,
+            profile: formData.profile != "" ? normalizeImagePath(formData.profile) : undefined,
+            cover: formData.cover != "" ? normalizeImagePath(formData.cover) : undefined,
             admin_id: admin_id,
         };
 
@@ -82,7 +83,7 @@ const CreateEvent = () => {
     return (
         <div className="flex h-full text-left bg-white rounded-lg shadow-lg items-center">
             <div className="p-8 pt-10 md:pt-12 w-full">
-                <h1 className="text-2xl font-bold text-gray-700 mb-4">
+                <h1 className="text-2xl font-bold text-gray-700 mb-6">
                     Create an Event
                 </h1>
                 {/* {message && (
@@ -93,7 +94,7 @@ const CreateEvent = () => {
                 <form
                     id="event-form"
                     onSubmit={handleEventFormSubmit}
-                    className="space-y-8"
+                    className="space-y-8 mt-6"
                 >
                     <div>
                         <label
@@ -191,13 +192,34 @@ const CreateEvent = () => {
                                 Profile Image URL:
                             </label>
                             <input
-                                type="url"
+                                type="text"
                                 id="profile"
                                 name="profile"
                                 className="adminDropDownInput"
                                 value={formData.profile}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    let value = e.target.value;
+                                    // Convert local Windows paths to relative paths
+                                    if (value.includes("public\\img\\") || value.includes("public/img/")) {
+                                        value = value.replace(/.*public[\\/]img[\\/]/, "/img/");
+                                    }
+                                    // Convert backslashes to forward slashes
+                                    value = value.replace(/\\/g, "/");
+                                    // URL encode spaces for proper handling
+                                    if (value.startsWith("/img/") && value.includes(" ")) {
+                                        // Keep the path as-is, Next.js will handle it
+                                        // But we can encode spaces if needed
+                                        value = value.replace(/ /g, "%20");
+                                    }
+                                    setFormData({ ...formData, profile: value });
+                                }}
+                                placeholder="https://example.com/image.jpg or /img/filename.jpg"
                             />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Use full URL (https://...) or local path from /public/img/ (e.g., /img/rcb.webp)
+                                <br />
+                                <span className="text-blue-600">Tip: For files with spaces, use /img/khlo%20mahi%20rcb.jpg</span>
+                            </p>
                         </div>
                         <div>
                             <label
@@ -207,13 +229,34 @@ const CreateEvent = () => {
                                 Cover Image URL:
                             </label>
                             <input
-                                type="url"
+                                type="text"
                                 id="cover"
                                 name="cover"
                                 className="adminDropDownInput"
                                 value={formData.cover}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    let value = e.target.value;
+                                    // Convert local Windows paths to relative paths
+                                    if (value.includes("public\\img\\") || value.includes("public/img/")) {
+                                        value = value.replace(/.*public[\\/]img[\\/]/, "/img/");
+                                    }
+                                    // Convert backslashes to forward slashes
+                                    value = value.replace(/\\/g, "/");
+                                    // URL encode spaces for proper handling
+                                    if (value.startsWith("/img/") && value.includes(" ")) {
+                                        // Keep the path as-is, Next.js will handle it
+                                        // But we can encode spaces if needed
+                                        value = value.replace(/ /g, "%20");
+                                    }
+                                    setFormData({ ...formData, cover: value });
+                                }}
+                                placeholder="https://example.com/image.jpg or /img/filename.jpg"
                             />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Use full URL (https://...) or local path from /public/img/ (e.g., /img/rcb.webp)
+                                <br />
+                                <span className="text-blue-600">Tip: For files with spaces, use /img/khlo%20mahi%20rcb.jpg</span>
+                            </p>
                         </div>
                     </div>
                     <div>

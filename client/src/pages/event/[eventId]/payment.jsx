@@ -139,16 +139,16 @@ export default function payment() {
                         stripe
                     </span>
                 </div>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-gray-600">
                     Payment is currently in Test Mode
                 </div>
 
                 <div className="m-6 flex flex-col ">
                     <div>Use the following test credentials: </div>
 
-                    <div className="relative mb-6 overflow-x-auto shadow-md sm:rounded-lg w-full lg:w-1/3 ">
-                        <table className="w-full text-sm text-left my-2">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                    <div className="relative mb-6 overflow-x-auto shadow-md sm:rounded-lg w-full lg:w-1/3 bg-white border border-gray-200">
+                        <table className="w-full text-sm text-left my-2 text-gray-900">
+                            <thead className="text-xs text-gray-900 uppercase bg-gray-100">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
                                         Field
@@ -159,15 +159,15 @@ export default function payment() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="bg-white border-b hover:bg-gray-50">
+                                <tr className="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <th
                                         scope="row"
-                                        className="px-6 py-4 font-medium whitespace-nowrap"
+                                        className="px-6 py-4 font-medium whitespace-nowrap text-gray-900"
                                     >
                                         Card Number
                                     </th>
                                     <td
-                                        className="px-6 py-4"
+                                        className="px-6 py-4 text-gray-900 cursor-pointer"
                                         onClick={() => {
                                             navigator.clipboard.writeText(
                                                 "4242 4242 4242 4242"
@@ -178,25 +178,25 @@ export default function payment() {
                                         4242 4242 4242 4242
                                     </td>
                                 </tr>
-                                <tr className="bg-white border-b hover:bg-gray-50">
+                                <tr className="bg-white border-b border-gray-200 hover:bg-gray-50">
                                     <th
                                         scope="row"
-                                        className="px-6 py-4 font-medium whitespace-nowrap"
+                                        className="px-6 py-4 font-medium whitespace-nowrap text-gray-900"
                                     >
                                         Expiry
                                     </th>
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-4 text-gray-900">
                                         Any future date (eg: {month}/{year})
                                     </td>
                                 </tr>
                                 <tr className="bg-white hover:bg-gray-50">
                                     <th
                                         scope="row"
-                                        className="px-6 py-4 font-medium whitespace-nowrap"
+                                        className="px-6 py-4 font-medium whitespace-nowrap text-gray-900"
                                     >
                                         CVC
                                     </th>
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-4 text-gray-900">
                                         Any 3 digit number (eg: 345)
                                     </td>
                                 </tr>

@@ -1,3 +1,5 @@
+import { normalizeImagePath } from "@/utils/normalizeImagePath";
+import { useTheme } from "@/context/ThemeContext";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -6,6 +8,7 @@ function EventsCarousel() {
     const [events, setEvents] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
     const router = useRouter();
+    const { theme } = useTheme();
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -15,7 +18,11 @@ function EventsCarousel() {
                 );
                 if (!response.ok) return;
                 const data = await response.json();
-                setEvents(data.slice(0, 6)); // show top 6 events
+                // Filter out events without event_id and show top 6
+                const validEvents = data
+                    .filter((event) => event.event_id && event.event_id !== "undefined")
+                    .slice(0, 6);
+                setEvents(validEvents);
             } catch (e) {
                 console.error("Error loading events for carousel", e);
             }
@@ -27,7 +34,7 @@ function EventsCarousel() {
         if (!events.length) return;
         const id = setInterval(() => {
             setActiveIndex((prev) => (prev + 1) % events.length);
-        }, 4000);
+        }, 5000);
         return () => clearInterval(id);
     }, [events]);
 
@@ -35,71 +42,153 @@ function EventsCarousel() {
 
     const active = events[activeIndex];
 
+    const titleTextClass =
+        theme === "dark" ? "text-white" : "text-[color:var(--gray-color)]";
+    const bodyTextClass =
+        theme === "dark" ? "text-gray-200" : "text-[color:var(--light-gray)]";
+
     return (
-        <div className="mt-2">
-            <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--gray-color)]">
-                    Now showing
-                </h3>
-                <div className="flex gap-1">
-                    {events.map((_, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => setActiveIndex(idx)}
-                            className={`h-1.5 rounded-full transition-all ${
+        <div className="relative w-full">
+            {/* Full-width dark gradient background */}
+            <div className="relative w-full h-[60vh] min-h-[520px] md:h-[70vh] overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+                {/* Animated gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 animate-pulse"></div>
+                
+                {/* Event slides */}
+                <div className="relative h-full">
+                    {events.map((event, idx) => (
+                        <div
+                            key={event.event_id}
+                            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
                                 idx === activeIndex
-                                    ? "w-6 bg-[color:var(--darker-secondary-color)]"
-                                    : "w-2 bg-slate-600"
+                                    ? "opacity-100 scale-100 z-10"
+                                    : "opacity-0 scale-95 z-0"
                             }`}
-                            aria-label={`Go to slide ${idx + 1}`}
-                        />
+                        >
+                            <div className="relative h-full w-full">
+                                {/* Background image with overlay */}
+                                {event.cover && (
+                                    <div className="absolute inset-0">
+                                        <Image
+                                            src={normalizeImagePath(event.cover)}
+                                            alt={event.name}
+                                            fill
+                                            className="object-cover"
+                                            sizes="100vw"
+                                            priority={idx === activeIndex}
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-transparent"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                                    </div>
+                                )}
+                                
+                                {/* Content overlay - centered */}
+                                <div className="relative h-full flex items-center justify-center">
+                                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-center">
+                                        <div className="max-w-4xl w-full flex flex-col gap-6 text-white text-center md:text-left">
+                                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-0">
+                                                <span className="inline-flex items-center justify-center md:justify-start gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-semibold uppercase tracking-widest rounded-full shadow-lg w-fit mx-auto md:mx-0">
+                                                    <span className="w-2 h-2 bg-white rounded-full animate-ping"></span>
+                                                    Now Showing
+                                                </span>
+                                                <div className="flex items-center justify-center md:justify-end gap-2 text-xs uppercase tracking-widest text-white/70">
+                                                    <span>Swipe</span>
+                                                    <div className="flex gap-2">
+                                                        {events.map((_, dotIdx) => (
+                                                            <button
+                                                                key={dotIdx}
+                                                                onClick={() => setActiveIndex(dotIdx)}
+                                                                className={`rounded-full transition-all duration-300 ${
+                                                                    dotIdx === activeIndex
+                                                                        ? "w-10 h-2 bg-gradient-to-r from-blue-400 to-purple-400 shadow-lg"
+                                                                        : "w-2 h-2 bg-white/40 hover:bg-white/70"
+                                                                }`}
+                                                                aria-label={`Go to slide ${dotIdx + 1}`}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="text-center md:text-left">
+                                                <h2 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight drop-shadow-2xl ${titleTextClass}`}>
+                                                    {event.name}
+                                                </h2>
+                                                <p className={`text-lg md:text-xl mb-2 line-clamp-2 drop-shadow-lg ${bodyTextClass}`}>
+                                                    {event.description}
+                                                </p>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm md:text-base max-w-2xl mx-auto md:mx-0">
+                                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-lg">
+                                                    <p className="text-white/70 text-xs uppercase tracking-widest mb-1">
+                                                        When
+                                                    </p>
+                                                    <p className="font-semibold text-white">
+                                                        {event.date}
+                                                    </p>
+                                                    <p className="text-white/80">{event.time}</p>
+                                                </div>
+                                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-lg">
+                                                    <p className="text-white/70 text-xs uppercase tracking-widest mb-1">
+                                                        Where
+                                                    </p>
+                                                    <p className="font-semibold text-white">
+                                                        {event.venue}
+                                                    </p>
+                                                </div>
+                                                <div className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl p-4 shadow-2xl">
+                                                    <p className="text-white/80 text-xs uppercase tracking-widest mb-1">
+                                                        Starting at
+                                                    </p>
+                                                    <p className="font-bold text-2xl text-white">
+                                                        ₹ {event.price}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex flex-wrap gap-4">
+                                                <button
+                                                    onClick={() => router.push(`/event/${event.event_id}`)}
+                                                    className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300"
+                                                >
+                                                    Book Now
+                                                </button>
+                                                <button
+                                                    onClick={() => router.push(`/event/${event.event_id}`)}
+                                                    className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-2xl border border-white/40 shadow-lg backdrop-blur-md transition-all duration-300"
+                                                >
+                                                    View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     ))}
                 </div>
-            </div>
 
-            <button
-                onClick={() => router.push(`/event/${active.event_id}`)}
-                className="group w-full flex items-stretch rounded-3xl overflow-hidden border border-slate-200 bg-[color:var(--white-color)] shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer text-left"
-            >
-                <div className="relative w-2/3 h-56 sm:h-72 md:h-80">
-                    {active.profile && (
-                        <Image
-                            src={active.profile}
-                            alt={active.name}
-                            fill
-                            className="object-cover"
-                            sizes="(min-width: 768px) 50vw, 100vw"
-                        />
-                    )}
-                </div>
-                <div className="flex-1 p-4 sm:p-5 flex flex-col justify-between bg-[color:var(--primary-color)]">
-                    <div>
-                        <p className="text-xs uppercase tracking-wide text-[color:var(--light-gray)] mb-1">
-                            Upcoming event
-                        </p>
-                        <h3 className="text-xl font-semibold text-[color:var(--gray-color)] mb-1 line-clamp-2">
-                            {active.name}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-[color:var(--light-gray)] mb-3 line-clamp-3">
-                            {active.description}
-                        </p>
-                    </div>
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-[color:var(--light-gray)]">
-                        <span>
-                            <strong className="text-[color:var(--gray-color)]">
-                                {active.date}
-                            </strong>{" "}
-                            at {active.time}
-                        </span>
-                        <span className="truncate">
-                            {active.venue}
-                        </span>
-                        <span className="font-semibold text-[color:var(--darker-secondary-color)]">
-                            ₹ {active.price}
-                        </span>
-                    </div>
-                </div>
-            </button>
+                {/* Navigation arrows */}
+                <button
+                    onClick={() => setActiveIndex((prev) => (prev - 1 + events.length) % events.length)}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+                    aria-label="Previous slide"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button
+                    onClick={() => setActiveIndex((prev) => (prev + 1) % events.length)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+                    aria-label="Next slide"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
         </div>
     );
 }

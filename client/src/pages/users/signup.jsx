@@ -218,7 +218,7 @@ export default function signup({ userIdCookie }) {
                                     id="email"
                                     name="email"
                                     value={email}
-                                    className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-full"
+                                    className="bg-gray-100 text-gray-900 placeholder-gray-500 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-full"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <button
@@ -246,7 +246,7 @@ export default function signup({ userIdCookie }) {
                                         name="email"
                                         defaultValue={email}
                                         disabled
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
+                                    className="bg-gray-100 text-gray-900 placeholder-gray-500 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
                                         // onChange={(e) => setOtp(e.target.value)}
                                     />
                                 </div>
@@ -263,7 +263,7 @@ export default function signup({ userIdCookie }) {
                                         autoComplete="none"
                                         required
                                         value={otp}
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
+                                    className="bg-gray-100 text-gray-900 placeholder-gray-500 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
                                         onChange={(e) => setOtp(e.target.value)}
                                     />
                                 </div>
@@ -280,7 +280,7 @@ export default function signup({ userIdCookie }) {
                                         value={username}
                                         autoComplete="none"
                                         required
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
+                                    className="bg-gray-100 text-gray-900 placeholder-gray-500 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
                                         onChange={(e) =>
                                             setUsername(e.target.value)
                                         }
@@ -298,7 +298,7 @@ export default function signup({ userIdCookie }) {
                                         name="regNumber"
                                         value={regNumber}
                                         autoComplete="none"
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
+                                    className="bg-gray-100 text-gray-900 placeholder-gray-500 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
                                         onChange={(e) =>
                                             setRegNumber(e.target.value)
                                         }
@@ -317,7 +317,7 @@ export default function signup({ userIdCookie }) {
                                         value={contactNumber}
                                         autoComplete="none"
                                         required
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
+                                    className="bg-gray-100 text-gray-900 placeholder-gray-500 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
                                         onChange={(e) =>
                                             setContactNumber(e.target.value)
                                         }
