@@ -1,11 +1,10 @@
-import Developers from "@/components/Landing_Page_partials/Developers";
 import FeaturesZigZag from "@/components/Landing_Page_partials/FeaturesZigZag";
 import Header from "@/components/Landing_Page_partials/Header";
 import HeroHome from "@/components/Landing_Page_partials/HeroHome";
 import LandingPageDevelopers from "@/utils/landing_page_developers";
 import React, { useEffect } from "react";
 
-const [feature1, feature2, feature3, dev1, dev2, dev3] = LandingPageDevelopers;
+const [feature1, feature2, feature3] = LandingPageDevelopers;
 
 function LandingPage() {
     // run the server when a user enters the site
@@ -30,7 +29,6 @@ function LandingPage() {
                 <main className="grow">
                     <HeroHome />
                     <FeaturesZigZag images={[feature1, feature2, feature3]} />
-                    <Developers images={[dev1, dev2, dev3]} />
                 </main>
             </div>
         </div>

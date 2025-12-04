@@ -133,7 +133,13 @@ function UserDashboard() {
                                     {filteredEvents.length === 0 ? (
                                         <p>No events yet</p>
                                     ) : (
-                                        filteredEvents.map((event) => (
+                                        filteredEvents
+                                            .filter(
+                                                (event) =>
+                                                    event.name &&
+                                                    event.name.trim() !== ""
+                                            )
+                                            .map((event) => (
                                             <div
                                                 onClick={() => {
                                                     router.push(
@@ -158,10 +164,13 @@ function UserDashboard() {
                                                 <div className="flex flex-row justify-between items-start mt-4">
                                                     <div className="px-2">
                                                         <p className="text-sm text-gray-800 font-bold">
-                                                            {event.name &&
-                                                            event.name.length > 30
-                                                                ? event.name.slice(0, 30) + "..."
-                                                                : event.name || "Untitled event"}
+                                                            {event.name.length >
+                                                            30
+                                                                ? event.name.slice(
+                                                                      0,
+                                                                      30
+                                                                  ) + "..."
+                                                                : event.name}
                                                         </p>
                                                         <p className="text-sm text-gray-800">
                                                             {event.venue}
@@ -186,7 +195,7 @@ function UserDashboard() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))
+                                            ))
                                     )}
                                 </div>
                             </div>
