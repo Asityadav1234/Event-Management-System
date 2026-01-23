@@ -3,9 +3,11 @@ import dummyUsers from "@/utils/dummyUsers";
 import { useState, useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { useTheme } from "@/context/ThemeContext";
 
 const Registration = () => {
     const router = useRouter();
+    const { theme } = useTheme();
     const eventId = router.query.eventId;
     const [showChecklist, setShowChecklist] = useState(false);
     const [users, setUsers] = useState([]);
@@ -91,16 +93,24 @@ const Registration = () => {
         }
     };
 
+    // Theme-aware classes
+    const tableHeaderBg = theme === "dark" ? "bg-slate-800" : "bg-gray-100";
+    const tableBorder = theme === "dark" ? "border-slate-700" : "border-gray-300";
+    const tableText = theme === "dark" ? "text-gray-200" : "text-gray-900";
+    const inactiveButtonBg = theme === "dark" ? "bg-slate-700 text-gray-200" : "bg-gray-300 text-gray-800";
+    const inputBg = theme === "dark" ? "bg-slate-800 text-gray-200 placeholder-gray-400" : "bg-white text-gray-900 placeholder-gray-500";
+    const inputBorder = theme === "dark" ? "border-slate-600" : "border-gray-400";
+
     return (
-        <div className="pt-20 lg:pt-8 bg-[color:var(--primary-color)]">
+        <div className="pt-20 lg:pt-8 bg-[color:var(--primary-color)] text-[color:var(--gray-color)]">
             <AdminNavBar />
             <div className="container h-screen mx-auto my-4">
                 <div className="flex flex-col gap-y-3 sm:flex-row sm:gap-y-0 justify-between items-center mb-4">
                     <div className="flex space-x-2">
                         <button
-                            className={`px-4 py-2 rounded ${
+                            className={`px-4 py-2 rounded transition-colors ${
                                 showChecklist
-                                    ? "bg-gray-300 text-gray-800"
+                                    ? inactiveButtonBg
                                     : "bg-[color:var(--darker-secondary-color)] text-white hover:bg-[color:var(--secondary-color)]"
                             }`}
                             onClick={() => setShowChecklist(false)}
@@ -108,10 +118,10 @@ const Registration = () => {
                             All Users
                         </button>
                         <button
-                            className={`px-4 py-2 rounded ${
+                            className={`px-4 py-2 rounded transition-colors ${
                                 showChecklist
                                     ? "bg-[color:var(--darker-secondary-color)] text-white hover:bg-[color:var(--secondary-color)]"
-                                    : "bg-gray-300 text-gray-800"
+                                    : inactiveButtonBg
                             }`}
                             onClick={() => setShowChecklist(true)}
                         >
@@ -124,29 +134,29 @@ const Registration = () => {
                             placeholder="Search by name"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="px-[3%] py-1 border border-gray-400 rounded-md focus:border-[color:var(--darker-secondary-color)] focus:outline-none focus:ring-1 focus:ring-[color:var(--darker-secondary-color)]"
+                            className={`px-[3%] py-1 border ${inputBorder} ${inputBg} rounded-md focus:border-[color:var(--darker-secondary-color)] focus:outline-none focus:ring-1 focus:ring-[color:var(--darker-secondary-color)]`}
                         />
                     </div>
                 </div>
 
                 {showChecklist ? (
                     <div className="overflow-x-auto overflow-y-auto">
-                        <table className="w-full border border-gray-300">
+                        <table className={`w-full border ${tableBorder}`}>
                             <thead>
                                 <tr>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         #
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Name
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Email
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Reg. No.
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Checked
                                     </th>
                                 </tr>
@@ -165,23 +175,23 @@ const Registration = () => {
                                     .map((user, index) => (
                                         <tr
                                             key={user.id}
-                                            className={
-                                                user.checked ? "line-through" : ""
-                                            }
+                                            className={`${tableText} ${
+                                                user.checked ? "line-through opacity-60" : ""
+                                            }`}
                                         >
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {index + 1}
                                             </td>
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {user.name}
                                             </td>
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {user.email}
                                             </td>
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {user.regno}
                                             </td>
-                                            <td className="p-2 border border-gray-300 text-center w-1/4">
+                                            <td className={`p-2 border ${tableBorder} text-center w-1/4`}>
                                                 <label
                                                     htmlFor={`checkbox-${user.id}`}
                                                     className="flex cursor-pointer"
@@ -199,7 +209,7 @@ const Registration = () => {
                                                             className="sr-only"
                                                         />
                                                         <div
-                                                            className={`bg-white border border-[color:var(--darker-secondary-color)] rounded-md shadow-sm w-6 h-6 flex items-center justify-center mr-2 ${
+                                                            className={`${theme === "dark" ? "bg-slate-800" : "bg-white"} border border-[color:var(--darker-secondary-color)] rounded-md shadow-sm w-6 h-6 flex items-center justify-center mr-2 ${
                                                                 user.checked
                                                                     ? "ring-1 ring-[color:var(--darker-secondary-color)]"
                                                                     : ""
@@ -222,19 +232,19 @@ const Registration = () => {
                     </div>
                 ) : (
                     <div className="overflow-x-auto overflow-y-auto">
-                        <table className="w-full border border-gray-300">
+                        <table className={`w-full border ${tableBorder}`}>
                             <thead>
                                 <tr>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         #
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Name
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Email
                                     </th>
-                                    <th className="p-2 bg-gray-100 border border-gray-300">
+                                    <th className={`p-2 ${tableHeaderBg} ${tableBorder} border ${tableText}`}>
                                         Reg. No.
                                     </th>
                                 </tr>
@@ -247,17 +257,17 @@ const Registration = () => {
                                             .includes(searchQuery.toLowerCase())
                                     )
                                     .map((user, index) => (
-                                        <tr key={user.id}>
-                                            <td className="p-2 border border-gray-300">
+                                        <tr key={user.id} className={tableText}>
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {index + 1}
                                             </td>
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {user.name}
                                             </td>
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {user.email}
                                             </td>
-                                            <td className="p-2 border border-gray-300">
+                                            <td className={`p-2 border ${tableBorder}`}>
                                                 {user.regno}
                                             </td>
                                         </tr>
